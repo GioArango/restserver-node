@@ -1,6 +1,5 @@
 
-const Role = require('../models/role');
-const User = require('../models/user');
+const { Category, User, Role, Product } = require('../models');
 
 const validateRole = async(role = '') => {
     const existsRole = await Role.findOne({ role });
@@ -10,10 +9,24 @@ const validateRole = async(role = '') => {
     }
 }
 // Verificar si el correo existe
-const existEmail = async( email = '') => {
+const existEmail = async( email = '' ) => {
     const existEmail = await User.findOne({ email });
     if( existEmail ) {
         throw new Error(`El email ${email} ya está registrado`)
+    }
+}
+
+const existCategory = async( name = '' ) => {
+    const existCategory = await Category.findOne({ name });
+    if( existCategory ) {
+        throw new Error(`La categoría ${name} ya está registrada`)
+    }
+}
+
+const existProduct = async( name = '' ) => {
+    const existProduct = await Product.findOne({ name });
+    if( existProduct ) {
+        throw new Error(`El producto ${name} ya está registrada`)
     }
 }
 
@@ -24,8 +37,40 @@ const existUserById = async( id ) => {
     }
 }
 
+const existCategoryById = async( id ) => {
+
+    const existCategory = await Category.findById( id );
+    
+    if( !existCategory ) {
+        throw new Error(`La categoría con id ${id} no existe`)
+    } 
+
+    if( !existCategory.status ) {
+        throw new Error(`La categoría con id ${id} está inactiva`)
+    }
+
+}
+
+const existProductById = async( id ) => {
+
+    const existProduct = await Product.findById( id );
+    
+    if( !existProduct ) {
+        throw new Error(`El producto con id ${id} no existe`)
+    } 
+
+    if( !existProduct.status ) {
+        throw new Error(`El producto con id ${id} está inactivo`)
+    }
+
+}
+
 module.exports = {
     validateRole,
     existEmail,
-    existUserById
+    existCategory,
+    existProduct,
+    existUserById,
+    existCategoryById,
+    existProductById
 }
