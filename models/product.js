@@ -34,6 +34,9 @@ const ProductSchema = Schema({
     inStock: {
         type: Boolean,
         default: true
+    },
+    img: {
+        type: String
     }
 });
 
